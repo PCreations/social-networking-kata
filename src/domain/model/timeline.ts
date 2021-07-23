@@ -1,8 +1,8 @@
 import { User } from "./user";
 
 export class Timeline {
-  static create({ user, messages }: { user: string, messages: string[] }) {
-    return new Timeline(User.create({ name: user }), messages);
+  static create({ username, messages }: { username: string, messages: string[] }) {
+    return new Timeline(User.named({ name: username }), messages);
   }
   static of({ user, messages }: { user: User, messages: string[]}) {
     return new Timeline(user, messages)
@@ -14,16 +14,12 @@ export class Timeline {
     return this.user;
   }
 
-  public getMessage() {
-    return this.messages[0];
+  public getUserName() {
+    return this.user.getName();
   }
 
-  public pushMessage({ message }: { message: string }) {
-    this.messages.push(message)
-  }
-
-  postMessage({ text }: { text: string }) {
-    this.pushMessage({ message: text });
+  public postMessage({ text }: { text: string }) {
+    this.messages.push(text);
 
     return this;
   }

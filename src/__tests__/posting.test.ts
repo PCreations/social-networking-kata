@@ -2,23 +2,23 @@ import { createInMemoryTimelineRepository } from '../adapters/repositories';
 import { Timeline, User } from '../domain';
 import { createPostMessage } from '../use-cases';
 
-const buildTestTimeline = ({ userName, messages }: { userName: string, messages: string[] }) => {
-  const user = User.create({ name: userName });
+const buildTestTimeline = ({ username, messages }: { username: string, messages: string[] }) => {
+  const user = User.named({ name: username });
   const timeline = Timeline.of({ user, messages });
 
   return timeline;
 }
 
-const givenUserWantingToPostNewMessage = ({ userName, existingMessages }: { userName: string, existingMessages: string[] }) => {
-  const timeline = buildTestTimeline({ userName, messages: existingMessages });
+const givenUserWantingToPostNewMessage = ({ username, existingMessages }: { username: string, existingMessages: string[] }) => {
+  const timeline = buildTestTimeline({ username, messages: existingMessages });
   const timelineRepository = createInMemoryTimelineRepository({ initialTimeline: timeline });
   const postMessage = createPostMessage({ timelineRepository });
 
   return {
     user: timeline.getUser(),
-    postMessage: ({ message }: { message: string }) => postMessage({ user: userName, message }),
+    postMessage: ({ message }: { message: string }) => postMessage({ username, message }),
     getEditedTimeline() {
-      return timelineRepository.getForUser({ user: userName });
+      return timelineRepository.getForUsername({ username });
     }
   }
 }
@@ -29,7 +29,7 @@ describe('posting a message to a personnal timeline', () => {
   it('should post a message to the personnal empty timeline', async () => {
     // arrange
     const { postMessage, getEditedTimeline, user: Alice } = givenUserWantingToPostNewMessage({
-      userName: 'Alice',
+      username: 'Alice',
       existingMessages: []
     });
     
@@ -44,7 +44,7 @@ describe('posting a message to a personnal timeline', () => {
   it('should post a message with a different user to her\'s empty timeline', async () => {
     // arrange
     const { postMessage, getEditedTimeline, user: Bob } = givenUserWantingToPostNewMessage({
-      userName: 'Bob',
+      username: 'Bob',
       existingMessages: []
     });
     
@@ -59,7 +59,7 @@ describe('posting a message to a personnal timeline', () => {
   it('alice should post a message in her\'s non empty timeline', async () => {
     // arrange
     const { postMessage, getEditedTimeline, user: Alice } = givenUserWantingToPostNewMessage({
-      userName: 'Alice',
+      username: 'Alice',
       existingMessages: ['hello world']
     });
     

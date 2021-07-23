@@ -1,5 +1,5 @@
 export class User {
-  static create({ name }: { name: string }) {
+  static named({ name }: { name: string }) {
     return new User(name);
   }
 

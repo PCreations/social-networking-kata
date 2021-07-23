@@ -2,23 +2,11 @@ import { Timeline } from "../domain";
 import { TimelineRepository } from "../domain/repositories";
 
 
-interface PostMessageCommand {
-  user: string;
-  message: string;
-}
-
-interface PostMessageFactoryOptions {
-  timelineRepository: TimelineRepository
-}
-
-export const createPostMessage = ({ timelineRepository }: PostMessageFactoryOptions) => async (postMessageCommand: PostMessageCommand) => {
+export const createPostMessage = ({ timelineRepository }: { timelineRepository: TimelineRepository }) => async ({ username, message }: { username: string, message: string }) => {
   let timeline: Timeline;
-  timeline = await timelineRepository.getForUser({ user: postMessageCommand.user }) as Timeline;
-  if (!timeline) {
-    timeline = Timeline.create({ user: postMessageCommand.user, messages: [] });
-  }
+  timeline = await timelineRepository.getForUsername({ username }) as Timeline;
 
-  const editedTimeline = timeline.postMessage({ text: postMessageCommand.message });
+  const editedTimeline = timeline.postMessage({ text: message });
 
   return timelineRepository.save(editedTimeline);
 }

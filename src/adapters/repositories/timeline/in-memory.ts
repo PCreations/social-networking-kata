@@ -1,13 +1,13 @@
 import { TimelineRepository } from '../../../domain/repositories';
 
 export const createInMemoryTimelineRepository = (): TimelineRepository => {
-  const data: Array<string> = [];
+  const data: Map<string, string> = new Map();
   return {
-    async saveMessage({ message }) {
-      data.push(message);
+    async saveMessage({ user = 'Alice', message }) {
+      data.set(user, message);
     },
-    async getForUser() {
-      return data[0];
+    async getForUser({ user }) {
+      return data.get(user);
     }
   }
 }

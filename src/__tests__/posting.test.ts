@@ -13,7 +13,7 @@ describe('posting a message to a personnal timeline', () => {
     await postMessage({ user, message });
 
     // assert
-    const timeline = await timelineRepository.getForUser(user);
+    const timeline = await timelineRepository.getForUser({user});
     expect(timeline).toEqual('Hello World');
   });
 
@@ -28,7 +28,22 @@ describe('posting a message to a personnal timeline', () => {
     await postMessage({ user, message });
 
     // assert
-    const timeline = await timelineRepository.getForUser(user);
+    const timeline = await timelineRepository.getForUser({ user });
     expect(timeline).toEqual('Coucou le tchat twitch');
+  });
+
+  it('should post a message with a different user to her\'s timeline', async () => {
+    // arrange
+    const timelineRepository = createInMemoryTimelineRepository();
+    const user = 'Bob';
+    const message = 'Coucou c\'est Bob';
+    const postMessage = createPostMessage({ timelineRepository });
+    
+    // act
+    await postMessage({ user, message });
+
+    // assert
+    const timeline = await timelineRepository.getForUser({ user });
+    expect(timeline).toEqual('Coucou c\'est Bob');
   });
 });

@@ -10,5 +10,5 @@ interface PostMessageFactoryOptions {
 }
 
 export const createPostMessage = ({ timelineRepository }: PostMessageFactoryOptions) => async ({ user, message }: PostMessageCommand) => {
-  await timelineRepository.saveMessage({ message });
+  await timelineRepository.saveMessage({ user, message });
 }

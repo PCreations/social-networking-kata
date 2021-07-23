@@ -1,4 +1,6 @@
+import { Timeline } from "../model";
+
 export interface TimelineRepository {
-  getForUser({ user }: { user: string }): Promise<string | undefined>
-  saveMessage({ user, message }: { user: string, message: string }): Promise<void> 
+  getForUser({ user }: { user: string }): Promise<Timeline | undefined>
+  save(timeline: Timeline): Promise<void> 
 }

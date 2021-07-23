@@ -1,4 +1,5 @@
 import { createInMemoryTimelineRepository } from '../adapters/repositories';
+import { Timeline } from '../domain';
 import { createPostMessage } from '../use-cases';
 
 describe('posting a message to a personnal timeline', () => {
@@ -14,7 +15,7 @@ describe('posting a message to a personnal timeline', () => {
 
     // assert
     const timeline = await timelineRepository.getForUser({user});
-    expect(timeline).toEqual('Hello World');
+    expect(timeline).toEqual(Timeline.create({ user, message }));
   });
 
   it('should post a different message to the personnal timeline', async () => {
@@ -29,7 +30,7 @@ describe('posting a message to a personnal timeline', () => {
 
     // assert
     const timeline = await timelineRepository.getForUser({ user });
-    expect(timeline).toEqual('Coucou le tchat twitch');
+    expect(timeline).toEqual(Timeline.create({ user, message }));
   });
 
   it('should post a message with a different user to her\'s timeline', async () => {
@@ -44,6 +45,6 @@ describe('posting a message to a personnal timeline', () => {
 
     // assert
     const timeline = await timelineRepository.getForUser({ user });
-    expect(timeline).toEqual('Coucou c\'est Bob');
+    expect(timeline).toEqual(Timeline.create({ user, message }));
   });
 });

@@ -16,4 +16,19 @@ describe('posting a message to a personnal timeline', () => {
     const timeline = await timelineRepository.getForUser(user);
     expect(timeline).toEqual('Hello World');
   });
+
+  it('should post a different message to the personnal timeline', async () => {
+    // arrange
+    const timelineRepository = createInMemoryTimelineRepository();
+    const user = 'Alice';
+    const message = 'Coucou le tchat twitch';
+    const postMessage = createPostMessage({ timelineRepository });
+    
+    // act
+    await postMessage({ user, message });
+
+    // assert
+    const timeline = await timelineRepository.getForUser(user);
+    expect(timeline).toEqual('Coucou le tchat twitch');
+  });
 });

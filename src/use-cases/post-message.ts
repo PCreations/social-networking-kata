@@ -15,7 +15,7 @@ export const createPostMessage = ({ timelineRepository }: PostMessageFactoryOpti
   let timeline: Timeline;
   timeline = await timelineRepository.getForUser({ user: postMessageCommand.user }) as Timeline;
   if (!timeline) {
-    timeline = Timeline.create({ user: postMessageCommand.user, message: '' });
+    timeline = Timeline.create({ user: postMessageCommand.user, messages: [] });
   }
 
   const editedTimeline = timeline.postMessage({ text: postMessageCommand.message });

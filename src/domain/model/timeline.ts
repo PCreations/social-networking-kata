@@ -1,20 +1,30 @@
 import { User } from "./user";
 
 export class Timeline {
-  static create({ user, message }: { user: string, message: string }) {
-    return new Timeline(User.create({ name: user }), message);
+  static create({ user, messages }: { user: string, messages: string[] }) {
+    return new Timeline(User.create({ name: user }), messages);
   }
-  private constructor(private readonly user: User, private readonly message: string) {}
+  static of({ user, messages }: { user: User, messages: string[]}) {
+    return new Timeline(user, messages)
+  }
+
+  private constructor(private readonly user: User, private readonly messages: Array<string>) {} 
 
   public getUser() {
     return this.user;
   }
 
   public getMessage() {
-    return this.message;
+    return this.messages[0];
+  }
+
+  public pushMessage({ message }: { message: string }) {
+    this.messages.push(message)
   }
 
   postMessage({ text }: { text: string }) {
-    return Timeline.create({ user: this.user.getName(), message: text });
+    this.pushMessage({ message: text });
+
+    return this;
   }
 }

@@ -1,11 +1,5 @@
-export class User {
-  static create({ name }: { name: string }) {
-    return new User(name);
-  }
+export const createUser = ({ name }: { name: string }) => Object.freeze({
+  name
+});
 
-  private constructor(private readonly name: string) {}
-
-  public getName() {
-    return this.name;
-  }
-}
+export type User = ReturnType<typeof createUser>

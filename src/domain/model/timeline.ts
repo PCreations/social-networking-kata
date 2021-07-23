@@ -1,30 +1,19 @@
-import { User } from "./user";
+import { User } from ".";
 
-export class Timeline {
-  static create({ user, messages }: { user: string, messages: string[] }) {
-    return new Timeline(User.create({ name: user }), messages);
-  }
-  static of({ user, messages }: { user: User, messages: string[]}) {
-    return new Timeline(user, messages)
-  }
+const createTimeline = ({ user, messages }: { user: User.User, messages: string[] }) => Object.freeze({
+  user,
+  messages
+});
 
-  private constructor(private readonly user: User, private readonly messages: Array<string>) {} 
+export type Timeline = ReturnType<typeof createTimeline>
 
-  public getUser() {
-    return this.user;
-  }
+export const postMessage = (timeline: Timeline, { message }: { message: string }) => createTimeline({
+  ...timeline,
+  messages: timeline.messages.concat(message)
+});
 
-  public getMessage() {
-    return this.messages[0];
-  }
+export const getTimelineUserName = (timeline: Timeline) => timeline.user.name
 
-  public pushMessage({ message }: { message: string }) {
-    this.messages.push(message)
-  }
+export const forUsername = ({ username }: { username: string }) => createTimeline({ user: User.createUser({ name: username }), messages: [] });
 
-  postMessage({ text }: { text: string }) {
-    this.pushMessage({ message: text });
-
-    return this;
-  }
-}
+export const of = ({ user, messages }: { user: User.User, messages: string[] }) => createTimeline({ user, messages });
